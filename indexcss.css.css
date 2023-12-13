@@ -1,0 +1,32 @@
+body {
+    font-family: 'Cherry Cream Soda', cursive; /* Fruity and playful font */
+    margin: 0;
+    padding: 0;
+    background-image: url('index.png');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 28px; /* Adjusted font size for a larger heading */
+}
+
+button {
+    padding: 15px 30px; /* Adjusted padding for a larger button */
+    font-size: 24px; /* Adjusted font size for a larger button */
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(to right, #FF5F6D, #FFC371); /* Fruity gradient */
+    transition: background 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+button:hover {
+    background: linear-gradient(to right, #45a049, #4CAF50); /* Adjusted hover gradient */
+    transform: scale(1.1); /* Scale the button on hover for a playful effect */
+}

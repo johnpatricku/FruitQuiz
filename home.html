@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your head content remains unchanged -->
+</head>
+<body>
+    <link rel="stylesheet" href="homecss.css">
+
+    <div class="div1">
+        <h1>What fruit is it?</h1>
+        <p>Can you guess the correct word?</p>
+         
+        <img src="" id="wordImage" alt="Word Image">
+        <div id="wordDisplay"></div>
+        <p id="clue"></p>
+        <input type="text" id="userInput" placeholder="Type your guess">
+        <button onclick="checkGuess()">Check</button>
+        <p id="result"></p>
+        <p id="attempts"></p>
+        <p id="scoreboard">Score: 0</p>
+        <button type="button" onclick="resetGame()">Reset</button>
+        <button type='button' onclick="logout()">Quit</button>
+    </div>
+
+    <script>
+       var wordData = [
+    { word: "apple", clue: "It's a red or green fruit.", image: "apple.jpg" },
+    { word: "banana", clue: "It's a yellow fruit that monkeys love.", image: "banana.jpg" },
+    { word: "orange", clue: "It's a citrus fruit with a tough outer layer.", image: "orange.jpg" },
+    { word: "grape", clue: "It's a small, round, and usually purple fruit.", image: "grape.jpg" },
+    { word: "strawberry", clue: "It's a red fruit with small seeds on its surface.", image: "strawberry.jpg" },
+    { word: "kiwi", clue: "It's a brown, fuzzy fruit with green flesh.", image: "kiwi.jpg" },
+    { word: "blueberry", clue: "It's a small, round fruit that is often blue.", image: "blueberry.jpg" },
+    { word: "watermelon", clue: "It's a large, green fruit with red or pink flesh.", image: "watermellon.jpg" },
+    { word: "pineapple", clue: "It's a tropical fruit with a tough, spiky exterior and sweet interior.", image: "pineapple.jpg" },
+    { word: "mango", clue: "It's a juicy fruit with a smooth skin and sweet taste.", image: "mango.jpg" },
+    { word: "pear", clue: "It's a sweet fruit with a thin skin and a juicy interior.", image: "pear.jpg" },
+    { word: "cherry", clue: "It's a small, round fruit that is typically red or black.", image: "cherry.jpg" },
+    { word: "lemon", clue: "It's a yellow citrus fruit known for its sour taste.", image: "lemon.jpg" },
+    { word: "lime", clue: "It's a green citrus fruit similar to a lemon but with a milder flavor.", image: "lime.jpg" },
+    { word: "peach", clue: "It's a fuzzy fruit with a sweet and juicy flesh.", image: "peach.jpg" },
+    // Add more fruits as needed
+];
+
+
+        var currentWordIndex = 0;
+        var attemptsLeft = 3;
+        var score = 0;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function getNextWord() {
+            if (currentWordIndex < wordData.length) {
+                var selectedWord = wordData[currentWordIndex].word;
+                var selectedClue = wordData[currentWordIndex].clue;
+                var selectedImage = wordData[currentWordIndex].image;
+                displayWord(selectedWord, selectedImage);
+                document.getElementById('clue').innerHTML = 'Clue: ' + selectedClue;
+                attemptsLeft = 3;
+                document.getElementById('attempts').innerHTML = 'Attempts left: ' + attemptsLeft;
+            } else {
+                endGame();
+            }
+        }
+
+        function displayWord(word, image) {
+    var displayWord = word.split('').map(function (letter) {
+        return '_';
+    }).join(' ');
+    
+    document.getElementById('wordDisplay').innerHTML = displayWord;
+    document.getElementById('wordImage').src = image;
+    
+    // Store the current word for reference
+    document.getElementById('wordDisplay').setAttribute('data-word', word);
+}
+
+
+function checkGuess() {
+    var userInput = document.getElementById('userInput').value.toLowerCase();
+    var selectedWord = wordData[currentWordIndex].word;
+
+    if (userInput === selectedWord) {
+        document.getElementById('result').innerHTML = 'Correct! Well done!';
+        score++;
+        document.getElementById('scoreboard').innerHTML = 'Score: ' + score;
+        currentWordIndex++;
+        getNextWord();
+    } else {
+        attemptsLeft--;
+        document.getElementById('result').innerHTML = 'Incorrect. Try again.';
+        document.getElementById('attempts').innerHTML = 'Attempts left: ' + attemptsLeft;
+
+        if (attemptsLeft === 0) {
+            currentWordIndex++;
+            getNextWord();
+        } else {
+            // Update the display with the guessed letters
+            updateDisplay(userInput);
+        }
+    }
+
+    // Clear the user input
+    document.getElementById('userInput').value = '';
+}
+
+
+
+function updateDisplay(userInput) {
+    var wordDisplay = document.getElementById('wordDisplay');
+    var displayWord = wordDisplay.innerHTML;
+    var currentWord = wordDisplay.getAttribute('data-word');
+    
+    for (var i = 0; i < currentWord.length; i++) {
+        if (currentWord[i] === userInput && displayWord[i] === '_') {
+            displayWord = displayWord.substr(0, i) + userInput + displayWord.substr(i + 1);
+        }
+    }
+
+    document.getElementById('wordDisplay').innerHTML = displayWord;
+}
+
+
+
+        function endGame() {
+            document.getElementById('wordDisplay').innerHTML = 'Game Done!';
+            document.getElementById('wordImage').style.display = 'none';
+            document.getElementById('clue').innerHTML = '';
+            document.getElementById('userInput').style.display = 'none';
+            document.getElementById('result').innerHTML = 'Your final score is: ' + score;
+            document.getElementById('attempts').innerHTML = '';
+            document.getElementById('scoreboard').innerHTML = '';
+        }
+
+        function resetGame() {
+    // Reset game variables and UI elements
+    currentWordIndex = 0;
+    score = 0;
+    shuffleArray(wordData);
+    getNextWord();
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('scoreboard').innerHTML = 'Score: ' + score; // Reset the score display
+}
+
+
+        // Start the game
+        resetGame();
+        
+    </script>
+
+  
+
+    <script>
+        function logout() {
+            let response = confirm("Thank you for playing with our game");
+            if (response) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function createFlyingWord(word) {
+        const flyingWord = document.createElement('div');
+        flyingWord.className = 'flying-word';
+        flyingWord.style.left = Math.random() * window.innerWidth + 'px';
+        flyingWord.style.top = Math.random() * window.innerHeight + 'px';
+        flyingWord.textContent = word;
+        document.body.appendChild(flyingWord);
+        setTimeout(() => {
+            flyingWord.remove(); // Remove the flying word after the animation duration
+        }, 5000);
+    }
+
+    function showFlyingWords() {
+        const fruits = ["Super Apple",
+    "Bouncy Banana",
+    "Awesome Orange",
+    "Giggly Grape",
+    "Sweet Strawberry",
+    "Cheerful Kiwi",
+    "Magical Blueberry",
+    "Jolly Watermelon",
+    "Playful Pineapple",
+    "Mango Marvel",
+    "Pear Power",
+    "Cherry Charm",
+    "Lemon Love",
+    "Lime Laughter",
+    "Peachy Perfection",];
+        setInterval(() => {
+            const randomFruit = fruits[Math.floor(Math.random() * fruits.length)];
+            createFlyingWord(randomFruit);
+        }, 2000); // Create a flying word every 2 seconds
+    }
+
+    // Call the showFlyingWords function when the page loads
+    window.onload = showFlyingWords;
+    </script>
+
+</body>
+</html>
